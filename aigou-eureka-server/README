@@ -1,0 +1,10 @@
+aigou-eureka-server
+    注册中心  服务的注册于发现
+（1）依赖
+        eureka-server
+（2）配置
+    ① 启动类
+        @EnableEurekaServer
+    ② 配置文件 application.yml
+        端口号
+        Eureka的地址  单机版

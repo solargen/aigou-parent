@@ -1,0 +1,11 @@
+aigou-plat-parent
+    平台管理的父模块
+
+    plat-interface
+        domain
+        query
+        client
+    plat-service
+        controller
+        service
+        mapper

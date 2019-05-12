@@ -1,0 +1,10 @@
+aigou-zuul-gateway
+    爱购的后端微服务架构网关-统一入口
+
+（1）依赖
+    zuul
+    web
+（2）配置
+    启动类
+    application.yml
+        路由

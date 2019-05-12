@@ -1,0 +1,12 @@
+server:
+  port: 8001
+spring:
+  application:
+    name: AIGOU-PLAT
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    instance-id: aigou-plat-9001.com #为当前服务器添加实例的标识
+    prefer-ip-address: true
