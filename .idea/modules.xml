@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/aigou-config-server/aigou-config-server.iml" filepath="$PROJECT_DIR$/aigou-config-server/aigou-config-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/aigou-eureka-server/aigou-eureka-server.iml" filepath="$PROJECT_DIR$/aigou-eureka-server/aigou-eureka-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/aigou-parent.iml" filepath="$PROJECT_DIR$/aigou-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/aigou-plat-parent/aigou-plat-parent.iml" filepath="$PROJECT_DIR$/aigou-plat-parent/aigou-plat-parent.iml" />

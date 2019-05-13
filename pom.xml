@@ -13,6 +13,7 @@
         <module>aigou-zuul-gateway</module>
         <module>basic-parent</module>
         <module>aigou-plat-parent</module>
+        <module>aigou-config-server</module>
     </modules>
 
     <properties>

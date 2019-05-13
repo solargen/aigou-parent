@@ -1,0 +1,20 @@
+aigou-config-server
+    配置中心服务端
+    从github中拉取对应的配置
+（1）依赖
+    web依赖
+    erueka依赖
+    config-server依赖
+    springboot的插件支持
+
+ （2）配置
+    启动类
+    @EnableConfigServer
+    application.yml
+        端口号
+        服务名
+        erueka
+        配置中心参数
+            github的地址
+            用户名
+            密码

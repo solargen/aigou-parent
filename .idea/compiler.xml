@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="aigou-config-server" />
         <module name="aigou-eureka-server" />
         <module name="aigou-zuul-gateway" />
         <module name="basic-util" />
@@ -14,6 +15,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="aigou-config-server" target="1.8" />
       <module name="aigou-eureka-server" target="1.8" />
       <module name="aigou-parent" target="1.5" />
       <module name="aigou-plat-parent" target="1.5" />

@@ -8,3 +8,25 @@ aigou-zuul-gateway
     启动类
     application.yml
         路由
+
+
+整合配置中心客户端：
+（1）依赖
+    spring-cloud-starter-config
+（2）配置
+    bootstrap.yml
+        ①eureka
+        ②配置中心
+            #拉取配置
+            spring:
+              profiles:
+                  active: dev
+              cloud:
+                config:
+                  name: application-zuul #github上面名称
+                  profile: ${spring.profiles.active} #环境 java -jar -D xxx jar
+                  label: master #分支
+                  discovery:
+                    enabled: true #从eureka上面找配置服务
+                    service-id: AIGOU-CONFIG-SERVER #指定服务名
+                  #uri: http://127.0.0.1:1299 #配置服务器 单机配置
