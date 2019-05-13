@@ -22,7 +22,7 @@
       <module name="aigou-zuul-gateway" target="1.8" />
       <module name="basic-parent" target="1.5" />
       <module name="basic-util" target="1.5" />
-      <module name="plat-interface" target="1.5" />
+      <module name="plat-interface" target="1.8" />
       <module name="plat-service" target="1.8" />
     </bytecodeTargetLevel>
   </component>
