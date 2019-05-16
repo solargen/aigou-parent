@@ -31,7 +31,7 @@
       <module name="basic-util" target="1.7" />
       <module name="plat-interface" target="1.8" />
       <module name="plat-service" target="1.8" />
-      <module name="product-interface" target="1.5" />
+      <module name="product-interface" target="1.7" />
       <module name="product-service" target="1.8" />
     </bytecodeTargetLevel>
   </component>

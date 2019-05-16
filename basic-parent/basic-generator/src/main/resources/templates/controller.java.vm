@@ -77,7 +77,7 @@ public class ${entity}Controller {
     * @param query 查询对象
     * @return PageList 分页对象
     */
-    @RequestMapping(value = "/${table.entityPath}/page",method = RequestMethod.GET)
+    @RequestMapping(value = "/${table.entityPath}/page",method = RequestMethod.POST)
     public PageList<${entity}> json(@RequestBody ${entity}Query query)
     {
         IPage<${entity}> ${table.entityPath}IPage = ${table.entityPath}Service.page(new Page<>(query.getPage(), query.getSize()));
