@@ -9,9 +9,13 @@
         <module name="aigou-config-server" />
         <module name="aigou-eureka-server" />
         <module name="aigou-zuul-gateway" />
+        <module name="basic-core" />
+        <module name="basic-generator" />
         <module name="basic-util" />
         <module name="plat-interface" />
         <module name="plat-service" />
+        <module name="product-interface" />
+        <module name="product-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -19,11 +23,16 @@
       <module name="aigou-eureka-server" target="1.8" />
       <module name="aigou-parent" target="1.5" />
       <module name="aigou-plat-parent" target="1.5" />
+      <module name="aigou-product-parent" target="1.5" />
       <module name="aigou-zuul-gateway" target="1.8" />
+      <module name="basic-core" target="1.5" />
+      <module name="basic-generator" target="1.5" />
       <module name="basic-parent" target="1.5" />
-      <module name="basic-util" target="1.5" />
+      <module name="basic-util" target="1.7" />
       <module name="plat-interface" target="1.8" />
       <module name="plat-service" target="1.8" />
+      <module name="product-interface" target="1.5" />
+      <module name="product-service" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

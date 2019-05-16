@@ -14,6 +14,7 @@
         <module>basic-parent</module>
         <module>aigou-plat-parent</module>
         <module>aigou-config-server</module>
+        <module>aigou-product-parent</module>
     </modules>
 
     <properties>
