@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/aigou-common-parent/aigou-common-parent.iml" filepath="$PROJECT_DIR$/aigou-common-parent/aigou-common-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/aigou-config-server/aigou-config-server.iml" filepath="$PROJECT_DIR$/aigou-config-server/aigou-config-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/aigou-eureka-server/aigou-eureka-server.iml" filepath="$PROJECT_DIR$/aigou-eureka-server/aigou-eureka-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/aigou-parent.iml" filepath="$PROJECT_DIR$/aigou-parent.iml" />
@@ -12,6 +13,8 @@
       <module fileurl="file://$PROJECT_DIR$/basic-parent/basic-generator/basic-generator.iml" filepath="$PROJECT_DIR$/basic-parent/basic-generator/basic-generator.iml" />
       <module fileurl="file://$PROJECT_DIR$/basic-parent/basic-parent.iml" filepath="$PROJECT_DIR$/basic-parent/basic-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/basic-parent/basic-util/basic-util.iml" filepath="$PROJECT_DIR$/basic-parent/basic-util/basic-util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aigou-common-parent/common-interface/common-interface.iml" filepath="$PROJECT_DIR$/aigou-common-parent/common-interface/common-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aigou-common-parent/common-service/common-service.iml" filepath="$PROJECT_DIR$/aigou-common-parent/common-service/common-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/aigou-plat-parent/plat-interface/plat-interface.iml" filepath="$PROJECT_DIR$/aigou-plat-parent/plat-interface/plat-interface.iml" />
       <module fileurl="file://$PROJECT_DIR$/aigou-plat-parent/plat-service/plat-service.iml" filepath="$PROJECT_DIR$/aigou-plat-parent/plat-service/plat-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/aigou-product-parent/product-interface/product-interface.iml" filepath="$PROJECT_DIR$/aigou-product-parent/product-interface/product-interface.iml" />

@@ -1,12 +1,18 @@
 package cn.itsource.aigou.service.impl;
 
+import cn.itsource.aigou.client.RedisClient;
+import cn.itsource.aigou.client.TemplateClient;
 import cn.itsource.aigou.domain.ProductType;
 import cn.itsource.aigou.mapper.ProductTypeMapper;
 import cn.itsource.aigou.service.IProductTypeService;
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +41,47 @@ import java.util.Map;
 @Service
 public class ProductTypeServiceImpl extends ServiceImpl<ProductTypeMapper, ProductType> implements IProductTypeService {
 
+    @Autowired
+    private RedisClient redisClient;
+    @Autowired
+    private TemplateClient templateClient;
+
+
+    /**
+     * 生成静态化首页
+     */
+    @Override
+    public void generateStaticPage() {
+
+        //模板   数据   目标文件的路径
+        //路径问题最好不要硬编码，可以写到属性文件或者配置文件中，再读入
+
+        //根据product.type.vm模板生成 product.type.vm.html
+        String templatePath = "D:\\IDEA\\workspace\\aigou\\aigou-parent\\aigou-product-parent\\product-service\\src\\main\\resources\\template\\product.type.vm";
+        String targetPath = "D:\\IDEA\\workspace\\aigou\\aigou-parent\\aigou-product-parent\\product-service\\src\\main\\resources\\template\\product.type.vm.html";
+        List<ProductType> productTypes = loadDataTree();
+        Map<String,Object> params = new HashMap<>();
+        params.put("model",productTypes);
+        params.put("templatePath",templatePath);
+        params.put("targetPath",targetPath);
+        templateClient.createStaticPage(params);
+
+        //再根据home.vm生成home.html
+        templatePath = "D:\\IDEA\\workspace\\aigou\\aigou-parent\\aigou-product-parent\\product-service\\src\\main\\resources\\template\\home.vm";
+        targetPath = "D:\\IDEA\\workspace\\aigou\\aigou-web-parent\\ecommerce\\home.html";
+        params = new HashMap<>();
+
+        Map<String,Object> model = new HashMap<>();
+        model.put("staticRoot","D:\\IDEA\\workspace\\aigou\\aigou-parent\\aigou-product-parent\\product-service\\src\\main\\resources\\");
+        params.put("model",model);
+        params.put("templatePath",templatePath);
+        params.put("targetPath",targetPath);
+        templateClient.createStaticPage(params);
+
+    }
+
+
+
     /**
      * 加载类型树
      * （1）递归   看有没有children，有则继续查
@@ -43,10 +90,26 @@ public class ProductTypeServiceImpl extends ServiceImpl<ProductTypeMapper, Produ
      */
     @Override
     public List<ProductType> loadTreeData() {
-        //查询一级
-        return loadDataTree(0L); //递归
-        //return loadDataTree(); //循环
+        //先从redis中获取
+        String productTypesStr = redisClient.get("productTypes");
+        if(StringUtils.isEmpty(productTypesStr)){
+
+            System.out.println("111111111111111111111111111111111111111111111");
+
+            //从数据库中查询
+            //使用循环
+            List<ProductType> productTypes = loadDataTree();
+            //存到redis中
+            String jsonString = JSONArray.toJSONString(productTypes);
+            redisClient.set("productTypes",jsonString);
+            //返回
+            return productTypes;
+        }
+        //转换成List
+        List<ProductType> productTypes = JSONArray.parseArray(productTypesStr, ProductType.class);
+        return productTypes;
     }
+
 
     /**
      * 递归：
@@ -103,7 +166,47 @@ public class ProductTypeServiceImpl extends ServiceImpl<ProductTypeMapper, Produ
 
     }
 
+    //=====================重写增删改，同步redis缓存，同步生成静态页面==================================
+    @Override
+    public boolean save(ProductType entity) {
+        //先执行保存
+        boolean result = super.save(entity);
+        sychornizedOperate();
+        return result;
+    }
+
+    @Override
+    public boolean removeById(Serializable id) {
+        boolean result = super.removeById(id);
+        sychornizedOperate();
+        return result;
+    }
+
+    @Override
+    public boolean updateById(ProductType entity) {
+        boolean result = super.updateById(entity);
+        sychornizedOperate();
+        return result;
+    }
 
 
+    private void updateRedis(){
+        List<ProductType> productTypes = loadDataTree();
+        //转成json字符串缓存到redis中
+        String jsonString = JSONArray.toJSONString(productTypes);
+        redisClient.set("productTypes",jsonString);
+    }
+
+    //=====================结束==================================
+
+    /**
+     * 只要是增删改操作，都要同步去做两件事情
+     * （1）同步redis缓存
+     * （2）同步生成静态的主页面
+     */
+    private void sychornizedOperate(){
+        updateRedis();
+        generateStaticPage();
+    }
 
 }

@@ -16,4 +16,6 @@ import java.util.List;
 public interface IProductTypeService extends IService<ProductType> {
 
     List<ProductType> loadTreeData();
+
+    void generateStaticPage();
 }

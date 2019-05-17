@@ -12,6 +12,8 @@
         <module name="basic-core" />
         <module name="basic-generator" />
         <module name="basic-util" />
+        <module name="common-interface" />
+        <module name="common-service" />
         <module name="plat-interface" />
         <module name="plat-service" />
         <module name="product-interface" />
@@ -19,6 +21,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="aigou-common-parent" target="1.5" />
       <module name="aigou-config-server" target="1.8" />
       <module name="aigou-eureka-server" target="1.8" />
       <module name="aigou-parent" target="1.5" />
@@ -29,6 +32,8 @@
       <module name="basic-generator" target="1.5" />
       <module name="basic-parent" target="1.5" />
       <module name="basic-util" target="1.7" />
+      <module name="common-interface" target="1.5" />
+      <module name="common-service" target="1.8" />
       <module name="plat-interface" target="1.8" />
       <module name="plat-service" target="1.8" />
       <module name="product-interface" target="1.7" />

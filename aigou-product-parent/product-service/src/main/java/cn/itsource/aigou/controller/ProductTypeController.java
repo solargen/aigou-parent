@@ -93,4 +93,20 @@ public class ProductTypeController {
         return productTypeService.loadTreeData();
     }
 
+
+    /**
+     * 静态化首页
+     * @return
+     */
+    @GetMapping("/page")
+    public AjaxResult generateStaticPage(){
+        try {
+            productTypeService.generateStaticPage();
+            return AjaxResult.me();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.me().setSuccess(false).setMessage("生成失败!");
+        }
+    }
+
 }
