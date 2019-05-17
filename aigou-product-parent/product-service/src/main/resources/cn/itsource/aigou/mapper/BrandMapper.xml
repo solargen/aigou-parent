@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itsource.aigou.mapper.BrandMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.itsource.aigou.domain.Brand">
+        <id column="id" property="id" />
+        <result column="createTime" property="createTime" />
+        <result column="updateTime" property="updateTime" />
+        <result column="name" property="name" />
+        <result column="englishName" property="englishName" />
+        <result column="firstLetter" property="firstLetter" />
+        <result column="description" property="description" />
+        <result column="product_type_id" property="productTypeId" />
+        <result column="sortIndex" property="sortIndex" />
+        <result column="logo" property="logo" />
+    </resultMap>
+
+    <resultMap id="BrandMap" type="cn.itsource.aigou.domain.Brand">
+        <id column="id" property="id" />
+        <result column="createTime" property="createTime" />
+        <result column="updateTime" property="updateTime" />
+        <result column="name" property="name" />
+        <result column="englishName" property="englishName" />
+        <result column="firstLetter" property="firstLetter" />
+        <result column="description" property="description" />
+        <result column="product_type_id" property="productTypeId" />
+        <result column="sortIndex" property="sortIndex" />
+        <result column="logo" property="logo" />
+        <association property="productType" javaType="ProductType">
+            <id property="id" column="product_type_id"/>
+            <result property="name" column="pname"/>
+        </association>
+    </resultMap>
+
+    <!--selectByQuery(Page<Brand> page, BrandQuery query);-->
+    <select id="selectByQuery" resultMap="BrandMap">
+       SELECT b.*,pt.name pname
+       FROM t_brand b LEFT JOIN t_product_type pt ON b.product_type_id = pt.id
+       <include refid="whereSql"/>
+    </select>
+
+    <select id="selectByWrapper" resultMap="BrandMap">
+       SELECT b.*,pt.name pname
+       FROM t_brand b LEFT JOIN t_product_type pt ON b.product_type_id = pt.id
+       ${ew.customSqlSegment}
+    </select>
+
+
+
+
+    <sql id="whereSql">
+        <where>
+            <if test="query.keyword!=null and query.keyword!=''">
+                and (b.name like concat('%',#{query.keyword},'%') or b.englishName like concat('%',#{query.keyword},'%'))
+            </if>
+        </where>
+    </sql>
+
+</mapper>
