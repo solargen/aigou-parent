@@ -159,7 +159,8 @@ public class ProductTypeServiceImpl extends ServiceImpl<ProductTypeMapper, Produ
             if(productType.getPid()==0){
                 list.add(productType);
             }else{
-                map.get(productType.getPid()).getChildren().add(productType);
+                List<ProductType> children = map.get(productType.getPid()).getChildren();
+                children.add(productType);
             }
         }
         return list;
