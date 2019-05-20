@@ -1,0 +1,6 @@
+service fdfs_trackerd start
+service fdfs_storaged start
+netstat -unltp|grep fdfs
+/usr/bin/fdfs_monitor /etc/fdfs/storage.conf  监视器
+
+/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf  提供web服务

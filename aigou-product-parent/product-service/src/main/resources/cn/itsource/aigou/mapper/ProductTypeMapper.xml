@@ -19,4 +19,5 @@
         <result column="type_template_id" property="typeTemplateId" />
     </resultMap>
 
+
 </mapper>

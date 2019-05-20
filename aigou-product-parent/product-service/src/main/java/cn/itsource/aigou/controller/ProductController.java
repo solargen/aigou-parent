@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -28,6 +29,7 @@ public class ProductController {
             if(product.getId()!=null){
                 productService.updateById(product);
             }else{
+                product.setCreateTime(new Date().getTime());
                 productService.save(product);
             }
             return AjaxResult.me();
@@ -77,10 +79,9 @@ public class ProductController {
     * @param query 查询对象
     * @return PageList 分页对象
     */
-    @RequestMapping(value = "/product/page",method = RequestMethod.GET)
+    @RequestMapping(value = "/product/page",method = RequestMethod.POST)
     public PageList<Product> json(@RequestBody ProductQuery query)
     {
-        IPage<Product> productIPage = productService.page(new Page<>(query.getPage(), query.getSize()));
-        return new PageList<>(productIPage.getTotal(),productIPage.getRecords());
+        return productService.getByQuery(query);
     }
 }

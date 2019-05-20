@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author solargen
- * @since 2019-05-16
+ * @since 2019-05-20
  */
 @TableName("t_product")
 public class Product extends Model<Product> {
@@ -50,6 +50,48 @@ private static final long serialVersionUID=1L;
      */
     @TableField("productType")
     private Long productType;
+
+    @TableField(exist = false)
+    private ProductType pt;
+    @TableField(exist = false)
+    private Brand brand;
+
+    @TableField(exist = false)
+    private String content;
+    @TableField(exist = false)
+    private String description;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public ProductType getPt() {
+        return pt;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setPt(ProductType pt) {
+        this.pt = pt;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
 
     /**
      * 上架时间
@@ -121,6 +163,11 @@ private static final long serialVersionUID=1L;
 
     @TableField("badCommentCount")
     private Integer badCommentCount;
+
+    private String medias;
+
+    @TableField("skuProperties")
+    private String skuProperties;
 
 
     public Long getId() {
@@ -291,6 +338,22 @@ private static final long serialVersionUID=1L;
         this.badCommentCount = badCommentCount;
     }
 
+    public String getMedias() {
+        return medias;
+    }
+
+    public void setMedias(String medias) {
+        this.medias = medias;
+    }
+
+    public String getSkuProperties() {
+        return skuProperties;
+    }
+
+    public void setSkuProperties(String skuProperties) {
+        this.skuProperties = skuProperties;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -320,6 +383,8 @@ private static final long serialVersionUID=1L;
         ", goodCommentCount=" + goodCommentCount +
         ", commonCommentCount=" + commonCommentCount +
         ", badCommentCount=" + badCommentCount +
+        ", medias=" + medias +
+        ", skuProperties=" + skuProperties +
         "}";
     }
 }

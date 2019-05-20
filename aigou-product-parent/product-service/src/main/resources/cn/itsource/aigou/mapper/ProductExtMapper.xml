@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itsource.aigou.mapper.ProductExtMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.itsource.aigou.domain.ProductExt">
+        <id column="id" property="id" />
+        <result column="description" property="description" />
+        <result column="richContent" property="richContent" />
+        <result column="productId" property="productId" />
+        <result column="viewProperties" property="viewProperties" />
+        <result column="skuProperties" property="skuProperties" />
+    </resultMap>
+
+</mapper>
