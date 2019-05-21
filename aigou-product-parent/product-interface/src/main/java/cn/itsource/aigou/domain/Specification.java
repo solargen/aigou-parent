@@ -35,6 +35,10 @@ private static final long serialVersionUID=1L;
     @TableField("isSku")
     private Integer isSku;
 
+    //显示属性的值
+    @TableField(exist=false)
+    private String value;
+
 
     public Long getId() {
         return id;
@@ -81,5 +85,13 @@ private static final long serialVersionUID=1L;
         ", productTypeId=" + productTypeId +
         ", isSku=" + isSku +
         "}";
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

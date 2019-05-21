@@ -1,5 +1,6 @@
 package cn.itsource.aigou.controller;
 
+import cn.itsource.aigou.domain.Specification;
 import cn.itsource.aigou.service.IProductService;
 import cn.itsource.aigou.domain.Product;
 import cn.itsource.aigou.query.ProductQuery;
@@ -7,11 +8,13 @@ import cn.itsource.aigou.util.AjaxResult;
 import cn.itsource.aigou.util.PageList;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ProductController {
@@ -84,4 +87,35 @@ public class ProductController {
     {
         return productService.getByQuery(query);
     }
+
+    /**
+     * 获取商品的显示属性
+     * @param productId
+     * @return
+     */
+    @RequestMapping(value = "/product/viewProperties",method = RequestMethod.GET)
+    public List<Specification> viewProperties(@Param("productId") Long productId){
+        return productService.getViewProperties(productId);
+    }
+
+    /**
+     * 保存显示属性
+     * @param para
+     * @return
+     */
+    @RequestMapping(value = "/product/viewProperties",method = RequestMethod.POST)
+    public AjaxResult viewProperties(@RequestBody Map<String,Object> para){
+        try {
+            Long productId =  ((Integer)para.get("productId")).longValue();
+            List<Specification> specifications = (List<Specification>) para.get("viewProperties");
+            productService.saveViewProperties(specifications,productId);
+            return AjaxResult.me();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.me().setSuccess(false).setMessage("保存失败!"+e.getMessage());
+        }
+    }
+
+
+
 }
