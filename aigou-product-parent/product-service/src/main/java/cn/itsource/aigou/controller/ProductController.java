@@ -116,6 +116,35 @@ public class ProductController {
         }
     }
 
+    /**
+     * 获取商品的SKU属性
+     * @param productId
+     * @return
+     */
+    @RequestMapping(value = "/product/skuProperties",method = RequestMethod.GET)
+    public List<Specification> skuProperties(@Param("productId") Long productId){
+        return productService.getSkuProperties(productId);
+    }
+
+    /**
+     * 保存sku属性
+     * @param para
+     * @return
+     */
+    @RequestMapping(value = "/product/skuProperties",method = RequestMethod.POST)
+    public AjaxResult skuProperties(@RequestBody Map<String,Object> para){
+        try {
+            Long productId =  ((Integer)para.get("productId")).longValue();
+            List<Specification> specifications = (List<Specification>) para.get("skuProperties");
+            List<Map<String,String>> skus = (List<Map<String, String>>) para.get("skus");
+            productService.saveSkuProperties(specifications,productId,skus);
+            return AjaxResult.me();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.me().setSuccess(false).setMessage("保存失败!"+e.getMessage());
+        }
+    }
+
 
 
 }
