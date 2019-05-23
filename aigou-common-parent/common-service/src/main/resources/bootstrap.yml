@@ -18,3 +18,7 @@ spring:
         enabled: true #从eureka上面找配置服务
         service-id: AIGOU-CONFIG-SERVER #指定服务名
       #uri: http://127.0.0.1:1299 #配置服务器 单机配置
+  data:
+    elasticsearch:
+      cluster-nodes: 127.0.0.1:9300
+      cluster-name: elasticsearch

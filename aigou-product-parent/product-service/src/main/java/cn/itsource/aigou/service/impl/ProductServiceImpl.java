@@ -1,13 +1,8 @@
 package cn.itsource.aigou.service.impl;
 
-import cn.itsource.aigou.domain.Product;
-import cn.itsource.aigou.domain.ProductExt;
-import cn.itsource.aigou.domain.Sku;
-import cn.itsource.aigou.domain.Specification;
-import cn.itsource.aigou.mapper.ProductExtMapper;
-import cn.itsource.aigou.mapper.ProductMapper;
-import cn.itsource.aigou.mapper.SkuMapper;
-import cn.itsource.aigou.mapper.SpecificationMapper;
+import cn.itsource.aigou.client.ElasticSearchClient;
+import cn.itsource.aigou.domain.*;
+import cn.itsource.aigou.mapper.*;
 import cn.itsource.aigou.query.ProductQuery;
 import cn.itsource.aigou.service.IProductService;
 import cn.itsource.aigou.util.PageList;
@@ -43,6 +38,12 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private SpecificationMapper specificationMapper;
     @Autowired
     private SkuMapper skuMapper;
+    @Autowired
+    private ElasticSearchClient elasticSearchClient;
+    @Autowired
+    private BrandMapper brandMapper;
+    @Autowired
+    private ProductTypeMapper productTypeMapper;
 
     @Override
     public PageList<Product> getByQuery(ProductQuery query) {
@@ -153,6 +154,78 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             skuMapper.insert(sku);
         }
 
+    }
+
+    /**
+     * 商品上架
+     * @param ids
+     */
+    @Override
+    public void onSale(List<Long> ids) {
+        //查询数据库
+        List<Product> products = baseMapper.selectBatchIds(ids);
+        //保存到es中
+        //将List<Product> 转成List<ProductDoc>
+        List<ProductDoc> productDocList = products2productDocs(products);
+        elasticSearchClient.saveBatch(productDocList);
+        //修改上架时间和状态，保存到数据库
+        baseMapper.onSale(ids,new Date().getTime());
+    }
+
+    /**
+     * 类型转换 List<Product> 转成List<ProductDoc>
+     * @param products
+     * @return
+     */
+    private List<ProductDoc> products2productDocs(List<Product> products) {
+        List<ProductDoc> productDocList = new ArrayList<>();
+        for (Product product : products) {
+            ProductDoc productDoc = product2ProductDoc(product);
+            productDocList.add(productDoc);
+        }
+        return productDocList;
+    }
+
+    /**
+     * 类型转换 Product转ProductDoc
+     * @param product
+     * @return
+     */
+    private ProductDoc product2ProductDoc(Product product) {
+        ProductDoc productDoc = new ProductDoc();
+        productDoc.setId(product.getId());
+        productDoc.setProductTypeId(product.getProductType());
+        productDoc.setBrandId(product.getBrandId());
+        productDoc.setSaleCount(product.getSaleCount());
+        productDoc.setOnSaleTime(product.getOnSaleTime());
+        productDoc.setCommontCount(product.getCommentCount());
+        productDoc.setViewCount(product.getViewCount());
+        productDoc.setName(product.getName());
+        productDoc.setSubName(product.getSubName());
+        productDoc.setViewProperties(product.getViewProperties());
+        productDoc.setSkuProperties(product.getSkuProperties());
+        productDoc.setMedias(product.getMedias());
+
+        //all字段
+        Brand brand = brandMapper.selectById(product.getBrandId());
+        String brandName = brand.getName();
+        ProductType productType = productTypeMapper.selectById(product.getProductType());
+        String productTypeName = productType.getName();
+        String all = product.getName()+" "+product.getSubName()+" "+brandName+" "+productTypeName;
+        productDoc.setAll(all);// 标题  副标题  品牌名称  类型名称 中间以空格拼接
+
+        //最大价格和最小价格
+        List<Sku> skus = skuMapper.selectList(new QueryWrapper<Sku>().eq("productId", product.getId()));
+        Integer maxPrice = skus.get(0).getPrice();
+        Integer minPrice = skus.get(0).getPrice();
+        for (Sku sku : skus) {
+            if(sku.getPrice()>maxPrice) maxPrice = sku.getPrice();
+            if(sku.getPrice()<minPrice) minPrice = sku.getPrice();
+        }
+        productDoc.setMinPrice(minPrice);//每个sku都有对应的价格，从所有的价格中取到最小价格
+        productDoc.setMaxPrice(maxPrice);//从所有的sku中取到最大价格
+
+        return productDoc;
     }
 
 

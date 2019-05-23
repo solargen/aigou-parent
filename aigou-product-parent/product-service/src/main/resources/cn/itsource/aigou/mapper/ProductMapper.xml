@@ -59,6 +59,18 @@
         <result column="bname" property="brand.name"/>
     </resultMap>
 
+
+    <!--上架-->
+    <update id="onSale">
+        update t_product
+        set onSaleTime = #{onSaleTime},state=1
+        where id in
+        <foreach collection="ids" open="(" close=")" item="id" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+
     <select id="selectByQuery" resultMap="ProductMap">
         SELECT tp.*,tpt.name typename,tb.name bname
         FROM t_product tp

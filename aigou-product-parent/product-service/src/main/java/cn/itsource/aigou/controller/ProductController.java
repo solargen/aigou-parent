@@ -145,6 +145,23 @@ public class ProductController {
         }
     }
 
+    /**
+     * 商品上架
+     * @param ids
+     * @return
+     */
+    @PostMapping("/product/onSale")
+    public AjaxResult onSale(List<Long> ids){
+        try {
+            productService.onSale(ids);
+            return AjaxResult.me();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.me().setSuccess(false).setMessage("上架失败!"+e.getMessage());
+        }
+
+    }
+
 
 
 }

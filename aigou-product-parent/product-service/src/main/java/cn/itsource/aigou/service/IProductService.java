@@ -28,4 +28,6 @@ public interface IProductService extends IService<Product> {
     List<Specification> getSkuProperties(Long productId);
 
     void saveSkuProperties(List<Specification> specifications, Long productId, List<Map<String,String>> skus);
+
+    void onSale(List<Long> ids);
 }
