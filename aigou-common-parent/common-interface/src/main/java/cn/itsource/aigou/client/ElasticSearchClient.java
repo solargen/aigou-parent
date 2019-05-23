@@ -35,7 +35,7 @@ public interface ElasticSearchClient {
      * @return
      */
     @DeleteMapping("/es/delete")
-    AjaxResult delete(@RequestParam Long id);
+    AjaxResult delete(@RequestParam("id") Long id);
 
     /**
      * 批量删除

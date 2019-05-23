@@ -59,7 +59,7 @@ public class ProductEsController {
      * @return
      */
     @DeleteMapping("/es/delete")
-    public AjaxResult delete(@RequestParam Long id){
+    public AjaxResult delete(@RequestParam("id") Long id){
         try {
             repository.deleteById(id);
             return AjaxResult.me();

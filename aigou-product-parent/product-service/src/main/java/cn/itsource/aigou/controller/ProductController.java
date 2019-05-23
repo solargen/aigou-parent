@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -151,9 +152,10 @@ public class ProductController {
      * @return
      */
     @PostMapping("/product/onSale")
-    public AjaxResult onSale(List<Long> ids){
+    public AjaxResult onSale(Long[] ids){
         try {
-            productService.onSale(ids);
+            List<Long> idList = Arrays.asList(ids);
+            productService.onSale(idList);
             return AjaxResult.me();
         } catch (Exception e) {
             e.printStackTrace();

@@ -162,14 +162,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      */
     @Override
     public void onSale(List<Long> ids) {
+        //修改上架时间和状态，保存到数据库
+        baseMapper.onSale(ids,new Date().getTime());
         //查询数据库
         List<Product> products = baseMapper.selectBatchIds(ids);
         //保存到es中
         //将List<Product> 转成List<ProductDoc>
         List<ProductDoc> productDocList = products2productDocs(products);
         elasticSearchClient.saveBatch(productDocList);
-        //修改上架时间和状态，保存到数据库
-        baseMapper.onSale(ids,new Date().getTime());
     }
 
     /**
