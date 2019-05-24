@@ -85,6 +85,26 @@ public class ProductEsController {
         }
     }
 
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    @PostMapping("/es/deleteBatchByIds")
+    public AjaxResult deleteBatchByIds(@RequestBody List<Long> ids){
+        try {
+            for (Long id : ids) {
+                //如果es中有数据，再删除，否则会抛出异常
+                if(repository.existsById(id))
+                    repository.deleteById(id);
+            }
+            return AjaxResult.me();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.me().setSuccess(false).setMessage("删除失败!"+e.getMessage());
+        }
+    }
+
 
 
 

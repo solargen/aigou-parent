@@ -22,6 +22,20 @@ public class StrUtils {
         return null;
     }
 
+    /**
+     * 把传入的分隔符字符串转换字符串数组
+     *
+     * @param str
+     * @param splitStr 分隔符
+     * @return
+     */
+    public static String[] splitStr2StrArr(String str,String splitStr) {
+        if (str != null && !str.equals("")) {
+            return str.split(splitStr);
+        }
+        return null;
+    }
+
 
     /**
      * 把逗号分隔字符串转换List的Long
@@ -29,8 +43,8 @@ public class StrUtils {
      * @param str
      * @return
      */
-    public static List<Long> splitStr2LongArr(String str) {
-        String[] strings = splitStr2StrArr(str);
+    public static List<Long> splitStr2LongArr(String str,String splitStr) {
+        String[] strings = splitStr2StrArr(str,splitStr);
         if (strings == null) return null;
 
         List<Long> result = new ArrayList<>();

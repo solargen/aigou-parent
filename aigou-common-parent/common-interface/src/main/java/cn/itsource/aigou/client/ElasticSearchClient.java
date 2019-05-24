@@ -45,4 +45,12 @@ public interface ElasticSearchClient {
     @PostMapping("/es/deleteBatch")
     AjaxResult deleteBatch(@RequestBody List<ProductDoc> productDocs);
 
+    /**
+     * 批量id删除
+     * @param ids
+     * @return
+     */
+    @PostMapping("/es/deleteBatchByIds")
+    AjaxResult deleteBatchByIds(@RequestBody List<Long> ids);
+
 }

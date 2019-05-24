@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -44,6 +45,49 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private BrandMapper brandMapper;
     @Autowired
     private ProductTypeMapper productTypeMapper;
+
+    /**
+     * 重写修改，同步到es中
+     *
+     * service异常谨慎处理
+     *
+     * @param entity
+     * @return
+     */
+    @Override
+    @Transactional
+    public boolean updateById(Product entity) {
+        //修改数据库
+        super.updateById(entity);
+        //查询
+        Product product = baseMapper.selectById(entity.getId());
+        //判断是否已经上架
+        if(product.getState()==1){
+            //已经上架，则要同步到es中
+            ProductDoc productDoc = product2ProductDoc(product);
+            elasticSearchClient.save(productDoc);
+        }
+        return true;
+    }
+
+    /**
+     * 删除  同步删除es
+     * @param id
+     * @return
+     */
+    @Override
+    @Transactional
+    public boolean removeById(Serializable id) {
+        //查询出来，判断是否已经上架
+        Product product = baseMapper.selectById(id);
+        super.removeById(id);
+        if(product.getState()==1){
+            //删除es
+            elasticSearchClient.delete((Long) id);
+        }
+        //fastdfs删除........
+        return true;
+    }
 
     @Override
     public PageList<Product> getByQuery(ProductQuery query) {
@@ -161,6 +205,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * @param ids
      */
     @Override
+    @Transactional
     public void onSale(List<Long> ids) {
         //修改上架时间和状态，保存到数据库
         baseMapper.onSale(ids,new Date().getTime());
@@ -171,6 +216,20 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         List<ProductDoc> productDocList = products2productDocs(products);
         elasticSearchClient.saveBatch(productDocList);
     }
+
+    /**
+     * 下架
+     * @param idList
+     */
+    @Override
+    @Transactional
+    public void offSale(List<Long> idList) {
+        //修改数据库 下架时间  状态
+        baseMapper.offSale(idList,new Date().getTime());
+        //从es中批量删除
+        elasticSearchClient.deleteBatchByIds(idList);
+    }
+
 
     /**
      * 类型转换 List<Product> 转成List<ProductDoc>
@@ -216,8 +275,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         //最大价格和最小价格
         List<Sku> skus = skuMapper.selectList(new QueryWrapper<Sku>().eq("productId", product.getId()));
-        Integer maxPrice = skus.get(0).getPrice();
-        Integer minPrice = skus.get(0).getPrice();
+        Integer maxPrice = skus.size()>0?skus.get(0).getPrice():0;
+        Integer minPrice = skus.size()>0?skus.get(0).getPrice():0;
         for (Sku sku : skus) {
             if(sku.getPrice()>maxPrice) maxPrice = sku.getPrice();
             if(sku.getPrice()<minPrice) minPrice = sku.getPrice();

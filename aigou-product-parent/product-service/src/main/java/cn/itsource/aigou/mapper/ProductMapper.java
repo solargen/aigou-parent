@@ -22,4 +22,6 @@ public interface ProductMapper extends BaseMapper<Product> {
     IPage<Product> selectByQuery(Page<Product> page, @Param("query") ProductQuery query);
     //上架 修改上架时间和状态
     void onSale(@Param("ids") List<Long> ids,@Param("onSaleTime") Long onSaleTime);
+
+    void offSale(@Param("ids")List<Long> ids, @Param("offSaleTime")long offSaleTime);
 }

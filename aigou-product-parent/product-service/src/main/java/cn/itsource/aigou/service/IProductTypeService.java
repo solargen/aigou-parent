@@ -4,6 +4,7 @@ import cn.itsource.aigou.domain.ProductType;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -20,4 +21,6 @@ public interface IProductTypeService extends IService<ProductType> {
     void generateStaticPage();
 
     String getPathById(Long id);
+
+    List<Map<String,Object>> loadCrumbs(Long productTypeId);
 }

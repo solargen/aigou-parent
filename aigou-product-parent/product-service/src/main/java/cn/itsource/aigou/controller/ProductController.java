@@ -148,13 +148,15 @@ public class ProductController {
 
     /**
      * 商品上架
-     * @param ids
+     * @param ids   1,2,3,4,5
      * @return
      */
-    @PostMapping("/product/onSale")
-    public AjaxResult onSale(Long[] ids){
+    @GetMapping("/product/onSale")
+    public AjaxResult onSale(@RequestParam("ids") String ids){
         try {
-            List<Long> idList = Arrays.asList(ids);
+            String[] idStrArr = ids.split(",");//获取id数组--id为字符串类型
+            Long[] idLongArr = parseLongArr(idStrArr);//转为long类型的id
+            List<Long> idList = Arrays.asList(idLongArr);//数组转List
             productService.onSale(idList);
             return AjaxResult.me();
         } catch (Exception e) {
@@ -164,6 +166,38 @@ public class ProductController {
 
     }
 
+    /**
+     * 商品下架
+     * @param ids   1,2,3,4,5
+     * @return
+     */
+    @GetMapping("/product/offSale")
+    public AjaxResult offSale(@RequestParam("ids") String ids){
+        try {
+            String[] idStrArr = ids.split(",");//获取id数组--id为字符串类型
+            Long[] idLongArr = parseLongArr(idStrArr);//转为long类型的id
+            List<Long> idList = Arrays.asList(idLongArr);//数组转List
+            productService.offSale(idList);
+            return AjaxResult.me();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.me().setSuccess(false).setMessage("下架失败!"+e.getMessage());
+        }
+
+    }
+
+    /**
+     * string数组转long数组
+     * @param idStrArr
+     * @return
+     */
+    private Long[] parseLongArr(String[] idStrArr) {
+        Long[] idLongArr = new Long[idStrArr.length];
+        for(int i=0;i<idStrArr.length;i++){
+            idLongArr[i] = Long.parseLong(idStrArr[i]);
+        }
+        return idLongArr;
+    }
 
 
 }

@@ -16,7 +16,7 @@
 					<img src="/static/img/test/mall_logo_0.png">
 				</a>
 				<div class="search SZY-SEARCH-BOX-TOP">
-					<form class="search-form SZY-SEARCH-BOX-FORM" method="get" name="" action="/list">
+					<form class="search-form SZY-SEARCH-BOX-FORM" method="get" name="" action="/list.html">
 						<div class="search-info">
 							<div class="search-type-box">
 								<ul class="search-type">
