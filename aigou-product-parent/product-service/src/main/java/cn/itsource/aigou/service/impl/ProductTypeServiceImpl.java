@@ -80,6 +80,11 @@ public class ProductTypeServiceImpl extends ServiceImpl<ProductTypeMapper, Produ
 
     }
 
+    @Override
+    public String getPathById(Long id) {
+        ProductType productType = baseMapper.selectById(id);
+        return productType.getPath();
+    }
 
 
     /**

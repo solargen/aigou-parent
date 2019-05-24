@@ -4,6 +4,7 @@ import cn.itsource.aigou.service.IBrandService;
 import cn.itsource.aigou.domain.Brand;
 import cn.itsource.aigou.query.BrandQuery;
 import cn.itsource.aigou.util.AjaxResult;
+import cn.itsource.aigou.util.LetterUtil;
 import cn.itsource.aigou.util.PageList;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -25,6 +26,7 @@ public class BrandController {
     @RequestMapping(value="/brand",method= RequestMethod.POST)
     public AjaxResult save(@RequestBody Brand brand){
         try {
+            brand.setFirstLetter(LetterUtil.getFirstLetter(brand.getName()));
             if(brand.getId()!=null){
                 brandService.updateById(brand);
             }else{

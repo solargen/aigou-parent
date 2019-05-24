@@ -109,4 +109,9 @@ public class ProductTypeController {
         }
     }
 
+    @GetMapping("/productType/path")
+    public String path(@RequestParam("id")Long id){
+        return productTypeService.getPathById(id);
+    }
+
 }
