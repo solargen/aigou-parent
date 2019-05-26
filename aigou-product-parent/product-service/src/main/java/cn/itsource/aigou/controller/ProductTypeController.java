@@ -1,5 +1,6 @@
 package cn.itsource.aigou.controller;
 
+import cn.itsource.aigou.service.IProductService;
 import cn.itsource.aigou.service.IProductTypeService;
 import cn.itsource.aigou.domain.ProductType;
 import cn.itsource.aigou.query.ProductTypeQuery;
@@ -17,6 +18,8 @@ import java.util.Map;
 public class ProductTypeController {
     @Autowired
     public IProductTypeService productTypeService;
+    @Autowired
+    private IProductService productService;
 
     /**
     * 保存和修改公用的
@@ -117,7 +120,7 @@ public class ProductTypeController {
      */
     @GetMapping("/productType/crumb")
     public List<Map<String,Object>> loadCrumbs(Long productTypeId){
-        return productTypeService.loadCrumbs(productTypeId);
+        return productService.loadCrumbs(productTypeId);
     }
 
 

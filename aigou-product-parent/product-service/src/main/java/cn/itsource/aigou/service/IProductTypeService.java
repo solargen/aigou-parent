@@ -21,6 +21,4 @@ public interface IProductTypeService extends IService<ProductType> {
     void generateStaticPage();
 
     String getPathById(Long id);
-
-    List<Map<String,Object>> loadCrumbs(Long productTypeId);
 }

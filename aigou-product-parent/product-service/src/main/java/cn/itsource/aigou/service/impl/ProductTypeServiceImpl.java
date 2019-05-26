@@ -87,32 +87,6 @@ public class ProductTypeServiceImpl extends ServiceImpl<ProductTypeMapper, Produ
         return productType.getPath();
     }
 
-    /**
-     * 加载类型面包屑
-     * @param productTypeId
-     * @return
-     */
-    @Override
-    public List<Map<String, Object>> loadCrumbs(Long productTypeId) {
-        //查询当前类型
-        ProductType productType = baseMapper.selectById(productTypeId);
-        //获取path路径
-        String path = productType.getPath().substring(1);// .1.2.3.
-        List<Long> ids = StrUtils.splitStr2LongArr(path, "\\."); // 1,2,30
-        List<Map<String,Object>> crumb = new ArrayList<>();//用来存放数据的
-        for (Long id : ids) {
-            Map<String,Object> map = new HashMap<>();
-            //当前类型
-            ProductType currentType = baseMapper.selectById(id);
-            //当前类型的其他同级别的类型  同pid  排除当前的id
-            List<ProductType> otherTypes = baseMapper.selectList(new QueryWrapper<ProductType>().eq("pid", currentType.getPid()).ne("id", currentType.getId()));
-            map.put("currentType",currentType);
-            map.put("otherTypes",otherTypes);
-            crumb.add(map);
-        }
-        return crumb;
-    }
-
 
     /**
      * 加载类型树

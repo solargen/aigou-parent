@@ -1,11 +1,13 @@
 package cn.itsource.aigou.service.impl;
 
 import cn.itsource.aigou.client.ElasticSearchClient;
+import cn.itsource.aigou.client.TemplateClient;
 import cn.itsource.aigou.domain.*;
 import cn.itsource.aigou.mapper.*;
 import cn.itsource.aigou.query.ProductQuery;
 import cn.itsource.aigou.service.IProductService;
 import cn.itsource.aigou.util.PageList;
+import cn.itsource.aigou.util.StrUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
@@ -45,6 +47,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private BrandMapper brandMapper;
     @Autowired
     private ProductTypeMapper productTypeMapper;
+    @Autowired
+    private TemplateClient templateClient;
 
     /**
      * 重写修改，同步到es中
@@ -214,7 +218,64 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         //保存到es中
         //将List<Product> 转成List<ProductDoc>
         List<ProductDoc> productDocList = products2productDocs(products);
+        //静态化该商品页面
+        for (Product product : products) {
+            staticProductDetail(product);
+        }
         elasticSearchClient.saveBatch(productDocList);
+    }
+
+    /**
+     * 静态化商品详情页面
+     * @param product
+     */
+    private void staticProductDetail(Product product) {
+        //模板路径
+        String templatePath = "D:\\IDEA\\workspace\\aigou\\aigou-parent\\aigou-product-parent\\product-service\\src\\main\\resources\\template\\product-detail.vm";
+        //生成的文件的路径
+        String targetPath = "D:\\IDEA\\workspace\\aigou\\aigou-web-parent\\ecommerce\\"+product.getId()+".html";
+        //数据
+        Map<String,Object> model = new HashMap<>();
+        model.put("staticRoot","D:\\IDEA\\workspace\\aigou\\aigou-parent\\aigou-product-parent\\product-service\\src\\main\\resources\\");
+        model.put("product",product);
+        List<Map<String, Object>> crumbs = this.loadCrumbs(product.getProductType());
+        model.put("crumbs",crumbs);
+        ProductExt productExt = productExtMapper.selectOne(new QueryWrapper<ProductExt>().eq("productId", product.getId()));
+        model.put("productExt",productExt);
+
+        //调用公共的接口
+        Map<String,Object> param = new HashMap<>();
+        param.put("templatePath",templatePath);
+        param.put("targetPath",targetPath);
+        param.put("model",model);
+        templateClient.createStaticPage(param);
+    }
+
+
+    /**
+     * 加载类型面包屑
+     * @param productTypeId
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> loadCrumbs(Long productTypeId) {
+        //查询当前类型
+        ProductType productType = productTypeMapper.selectById(productTypeId);
+        //获取path路径
+        String path = productType.getPath().substring(1);// .1.2.3.
+        List<Long> ids = StrUtils.splitStr2LongArr(path, "\\."); // 1,2,30
+        List<Map<String,Object>> crumb = new ArrayList<>();//用来存放数据的
+        for (Long id : ids) {
+            Map<String,Object> map = new HashMap<>();
+            //当前类型
+            ProductType currentType = productTypeMapper.selectById(id);
+            //当前类型的其他同级别的类型  同pid  排除当前的id
+            List<ProductType> otherTypes = productTypeMapper.selectList(new QueryWrapper<ProductType>().eq("pid", currentType.getPid()).ne("id", currentType.getId()));
+            map.put("currentType",currentType);
+            map.put("otherTypes",otherTypes);
+            crumb.add(map);
+        }
+        return crumb;
     }
 
     /**

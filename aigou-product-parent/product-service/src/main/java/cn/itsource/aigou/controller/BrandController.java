@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class BrandController {
@@ -84,4 +85,16 @@ public class BrandController {
     {
         return brandService.getByQuery(query);
     }
+
+    /**
+     * 根据类型编号加载所有品牌
+     * @param productTypeId
+     * @return
+     */
+    @GetMapping("/brand/loadByProductType")
+    public Map<String,Object> loadByProductType(@RequestParam("productTypeId") Long productTypeId){
+        return brandService.loadByPrductTypeId(productTypeId);
+    }
+
+
 }

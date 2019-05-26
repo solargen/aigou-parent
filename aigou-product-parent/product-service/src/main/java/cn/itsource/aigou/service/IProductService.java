@@ -32,4 +32,7 @@ public interface IProductService extends IService<Product> {
     void onSale(List<Long> ids);
 
     void offSale(List<Long> idList);
+
+    List<Map<String,Object>> loadCrumbs(Long productTypeId);
+
 }
