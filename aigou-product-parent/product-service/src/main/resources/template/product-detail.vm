@@ -578,7 +578,7 @@
 							</ul>
 						</div>
 						<div class="choose">
-							<!-- 商品规格 -->
+							<!-- 商品sku属性 -->
 
 							#foreach ($skuOption in $model.skuOptions)
 							<dl class="attr">

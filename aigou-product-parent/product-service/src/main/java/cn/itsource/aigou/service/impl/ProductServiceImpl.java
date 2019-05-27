@@ -231,7 +231,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      */
     private void staticProductDetail(Product product) {
         //模板路径
-        String templatePath = "D:\\IDEA\\workspace\\aigou\\aigou-parent\\aigou-product-parent\\product-service\\src\\main\\resources\\template\\product-detail.vm";
+        String templatePath = "D:\\IDEA\\workspace\\aigou\\aigou-parent\\aigou-product-parent\\product-service\\src\\main\\resources\\template\\productDetail\\product-detail.vm";
         //生成的文件的路径
         String targetPath = "D:\\IDEA\\workspace\\aigou\\aigou-web-parent\\ecommerce\\"+product.getId()+".html";
         //数据
@@ -242,6 +242,20 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         model.put("crumbs",crumbs);
         ProductExt productExt = productExtMapper.selectOne(new QueryWrapper<ProductExt>().eq("productId", product.getId()));
         model.put("productExt",productExt);
+        //显示属性
+        String viewPropertiesStr = product.getViewProperties();
+        List<Specification> viewProperties = JSONArray.parseArray(viewPropertiesStr,Specification.class);
+        model.put("viewProperties",viewProperties);
+        //sku属性
+        String skuPropertiesStr = product.getSkuProperties();
+        List<Specification> skuProperties = JSONArray.parseArray(skuPropertiesStr,Specification.class);
+        model.put("skuProperties",skuProperties);
+        //sku属性个数
+        model.put("skuCount",skuProperties.size());
+        //skus
+        List<Sku> skuList = skuMapper.selectList(new QueryWrapper<Sku>().eq("productId", product.getId()));
+        String skus = JSONArray.toJSONString(skuList);
+        model.put("skus",skus);
 
         //调用公共的接口
         Map<String,Object> param = new HashMap<>();
